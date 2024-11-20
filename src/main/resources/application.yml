@@ -1,0 +1,26 @@
+server:
+  port: 5000
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vehicle_db
+    driverClassName: org.postgresql.Driver
+    username: vehicle-user
+    password: root
+  application:
+    name: vehicle-server
+  jpa:
+    generate-ddl: true
+    hibernate:
+      globally-quoted-identifiers: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: true
+
+
+
+
+
+
+
