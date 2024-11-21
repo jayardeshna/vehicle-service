@@ -8,9 +8,11 @@ import java.util.List;
 public interface GeofenceService {
     Geofence createGeofence(GeofenceRequest geofenceRequest);
 
-    List<Geofence> getAllGeofences();
+    List<Geofence> getAllGeofence();
 
-    void updateGeofence(Long geofenceId, GeofenceRequest geofenceRequest);
+    Geofence updateGeofence(Long geofenceId, GeofenceRequest geofenceRequest);
 
     Geofence getGeofence(Long geofenceId);
+
+    void deleteGeofence(Long geofenceId);
 }

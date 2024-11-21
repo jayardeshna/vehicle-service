@@ -1,5 +1,6 @@
 package com.vehicle.management.model;
 
+import com.vehicle.management.enums.AlertType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,30 +20,20 @@ public class GeofenceEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
-    private Vehicle vehicle;
+    @Column(nullable = false)
+    private String vehicleId;
 
-    @ManyToOne
-    @JoinColumn(name = "geofence_id", nullable = false)
-    private Geofence geofence;
+    @Column(nullable = false)
+    private String geofenceName;
 
-    @Column(name = "entry_time", nullable = false)
     private LocalDateTime entryTime;
 
-    @Column(name = "exit_time")
     private LocalDateTime exitTime;
 
-    @Transient
-    private Duration duration;
+    private long stayDuration;
 
-    @Column(name = "is_authorized", nullable = false)
-    private Boolean isAuthorized;
+    private boolean authorized;
 
-    public Duration getDuration() {
-        if (entryTime != null && exitTime != null) {
-            return Duration.between(entryTime, exitTime);
-        }
-        return null;
-    }
+    private AlertType alertType;
+
 }

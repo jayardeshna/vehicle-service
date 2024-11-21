@@ -2,9 +2,7 @@ package com.vehicle.management.service.impl;
 
 import com.vehicle.management.exception.NotFoundException;
 import com.vehicle.management.model.Geofence;
-import com.vehicle.management.model.GeofenceVehicle;
 import com.vehicle.management.repository.GeofenceRepository;
-import com.vehicle.management.repository.GeofenceVehicleRepository;
 import com.vehicle.management.service.GeofenceService;
 import com.vehicle.management.service.VehicleService;
 import com.vehicle.management.transfer.GeofenceRequest;
@@ -21,45 +19,45 @@ public class GeofenceServiceImpl implements GeofenceService {
 
     private final GeofenceRepository geofenceRepository;
 
-    private final GeofenceVehicleRepository geofenceVehicleRepository;
-
     private final VehicleService vehicleService;
 
     @Transactional
     @Override
     public Geofence createGeofence(GeofenceRequest geofenceRequest) {
+        if (geofenceRepository.findByName(geofenceRequest.getName()) != null) {
+            throw new NotFoundException(NotFoundException.NotFoundType.GEOFENCE_NOT_FOUND);
+        }
         Geofence geofence = new Geofence();
         geofence.setName(geofenceRequest.getName());
-        geofence.setPolygon(geofenceRequest.getPolygon());
-        Geofence savedGeofence = geofenceRepository.save(geofence);
-        saveGeofenceVehicle(geofenceRequest.getAuthorizedVehicleIds(), savedGeofence);
-        return savedGeofence;
-    }
-
-    private void saveGeofenceVehicle(List<Long> authorizedVehicleIds, Geofence geofence) {
-        List<GeofenceVehicle> geofenceVehicles = new ArrayList<>();
-        for (Long vehicleId : authorizedVehicleIds) {
-            GeofenceVehicle geofenceVehicle = new GeofenceVehicle();
-            geofenceVehicle.setGeofence(geofence);
-            geofenceVehicle.setVehicle(vehicleService.getVehicle(vehicleId));
-            geofenceVehicles.add(geofenceVehicle);
-        }
-        geofenceVehicleRepository.saveAll(geofenceVehicles);
-    }
-
-    @Override
-    public List<Geofence> getAllGeofences() {
-        return geofenceRepository.findAll();
+        geofence.setCoordinates(geofenceRequest.getCoordinates());
+        geofence.setAuthorizedVehicles(
+                geofenceRequest.getAuthorizedVehicles() != null
+                        ? geofenceRequest.getAuthorizedVehicles()
+                        : new ArrayList<>()
+        );
+        return geofenceRepository.save(geofence);
     }
 
     @Transactional
+    public Geofence updateGeofence(Long id, GeofenceRequest geofenceRequest) {
+        Geofence existingGeofence = getGeofence(id);
+
+        existingGeofence.setName(geofenceRequest.getName());
+        existingGeofence.setCoordinates(geofenceRequest.getCoordinates());
+        existingGeofence.setAuthorizedVehicles(geofenceRequest.getAuthorizedVehicles());
+
+        return geofenceRepository.save(existingGeofence);
+    }
+
     @Override
-    public void updateGeofence(Long geofenceId, GeofenceRequest geofenceRequest) {
-        Geofence currentGeofence = getGeofence(geofenceId);
-        currentGeofence.setName(geofenceRequest.getName());
-        currentGeofence.setPolygon(geofenceRequest.getPolygon());
-        geofenceRepository.save(currentGeofence);
-        saveGeofenceVehicle(geofenceRequest.getAuthorizedVehicleIds(), currentGeofence);
+    public List<Geofence> getAllGeofence() {
+        return geofenceRepository.findAll();
+    }
+
+    @Override
+    public void deleteGeofence(Long geofenceId) {
+        Geofence geofence = getGeofence(geofenceId);
+        geofenceRepository.delete(geofence);
     }
 
     @Override

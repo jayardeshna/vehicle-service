@@ -19,17 +19,24 @@ public class Alert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
-    private Vehicle vehicle;
+    @Column(name = "vehicle_id")
+    private String vehicleId;
 
-    @ManyToOne
-    @JoinColumn(name = "geofence_id")
-    private Geofence geofence;
-
-    @Column(name = "alert_type")
-    private AlertType alertType;
+    @Column(name = "geofence_name")
+    private String geofenceName;
 
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
+
+    @Column(name = "alert_type")
+    @Enumerated(EnumType.STRING)
+    private AlertType alertType;
+
+    public Alert(String vehicleId, String geofenceName, LocalDateTime timestamp, AlertType alertType){
+        this.vehicleId  = vehicleId;
+        this.geofenceName = geofenceName;
+        this.timestamp = timestamp;
+        this.alertType = alertType;
+    }
+
 }

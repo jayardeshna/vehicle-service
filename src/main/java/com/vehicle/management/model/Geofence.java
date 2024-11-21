@@ -6,21 +6,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Geometry;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "geofences")
+@Table(name = "geofence")
 @Entity
 public class Geofence {
 
-    @Id  // Change to jakarta.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "polygon", nullable = false, columnDefinition = "geometry(Polygon, 4326)")
-    private Geometry polygon;
+    @ElementCollection
+    private List<String> coordinates;
+
+    @ElementCollection
+    private List<String> authorizedVehicles;
 
 }

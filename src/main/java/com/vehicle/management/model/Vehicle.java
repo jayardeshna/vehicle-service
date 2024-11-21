@@ -20,6 +20,10 @@ public class Vehicle {
     @Column(name = "name")
     private String name;
 
+    private String make;
+
+    private String model;
+
     public Vehicle(String name){
         this.name = name;
     }
