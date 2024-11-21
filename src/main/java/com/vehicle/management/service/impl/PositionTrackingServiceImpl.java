@@ -87,14 +87,13 @@ public class PositionTrackingServiceImpl implements PositionTrackingService {
     }
 
     private Geofence findGeofenceContainingPoint(double latitude, double longitude) {
-        System.out.println("\nSearching for geofence containing point: " + latitude + "," + longitude);
+        log.info("\nSearching for geofence containing point: {},{} " ,latitude ,longitude);
 
         List<Geofence> geofences = geofenceRepository.findAll();
         log.info("Found geofences: {}", geofences.size());
 
         for (Geofence geofence : geofences) {
             log.info("Checking geofence: {}", geofence.getName());
-            System.out.println("Coordinates: " + String.join(" | ", geofence.getCoordinates()));
 
             if (isPointInPolygon(latitude, longitude, geofence.getCoordinates())) {
                 log.info("Point is inside this geofence!");

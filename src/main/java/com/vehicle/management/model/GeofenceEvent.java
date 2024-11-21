@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,6 +32,7 @@ public class GeofenceEvent {
 
     private boolean authorized;
 
+    @Enumerated(EnumType.STRING)
     private AlertType alertType;
 
 }
