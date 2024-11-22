@@ -104,6 +104,7 @@ public class PositionTrackingServiceImpl implements PositionTrackingService {
         return null;
     }
 
+    //Ray-casting algorithm
     private boolean isPointInBoundingBox(double latitude, double longitude, List<String> polygonCoordinates) {
         if (polygonCoordinates == null || polygonCoordinates.isEmpty()) {
             return false;
@@ -137,7 +138,7 @@ public class PositionTrackingServiceImpl implements PositionTrackingService {
     }
 
 
-
+    //Ray-casting algorithm
     public boolean isPointInPolygon(double latitude, double longitude, List<String> polygonCoordinates) {
         System.out.println("\nDebug: Point-in-polygon check for " + latitude + "," + longitude);
         int i;
