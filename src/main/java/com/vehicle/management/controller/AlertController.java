@@ -26,9 +26,7 @@ public class AlertController {
             @RequestParam(required = false) String vehicleId,
             @RequestParam(required = false) String geofenceName,
             @RequestParam(required = false) AlertType alertType) {
-
-        List<Alert> alerts = alertService.getAlerts(vehicleId, geofenceName, alertType);
-        return new RestResponse(true, alerts);
+        return new RestResponse(true, alertService.getAlerts(vehicleId, geofenceName, alertType));
     }
 }
 
